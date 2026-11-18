@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Home | InkWell Blog</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="home">
+  <header class="site-header">
+    <a href="index.html" class="logo">InkWell</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">&#9776;</button>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="create-blog.html">Write</a>
+      <a href="login.html" id="loginLink">Login</a>
+      <a href="register.html" class="btn btn-small" id="registerLink">Register</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero">
+      <h1>Write what you know. Share what you learn.</h1>
+      <p>InkWell is a simple place to publish your thoughts and read others.</p>
+      <a href="create-blog.html" class="btn">Write a blog</a>
+    </section>
+    <section class="container">
+      <h2>Latest posts</h2>
+      <div class="grid" id="blogGrid"></div>
+    </section>
+  </main>
+  <footer class="site-footer">&copy; 2026 InkWell Blog.</footer>
+  <script src="js/script.js"></script>
+</body>
+</html>

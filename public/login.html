@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login | InkWell Blog</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="login">
+  <header class="site-header">
+    <a href="index.html" class="logo">InkWell</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">&#9776;</button>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="create-blog.html">Write</a>
+      <a href="login.html" id="loginLink">Login</a>
+      <a href="register.html" class="btn btn-small" id="registerLink">Register</a>
+    </nav>
+  </header>
+  <main>
+    <section class="auth-box">
+      <h1>Welcome back</h1>
+      <form id="loginForm" novalidate>
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="you@example.com">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Your password">
+        <p class="error" id="formError"></p>
+        <button type="submit" class="btn">Log in</button>
+      </form>
+      <p class="muted">New here? <a href="register.html">Create an account</a></p>
+    </section>
+  </main>
+  <footer class="site-footer">&copy; 2026 InkWell Blog.</footer>
+  <script src="js/script.js"></script>
+</body>
+</html>

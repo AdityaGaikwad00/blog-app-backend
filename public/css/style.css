@@ -1,0 +1,78 @@
+:root {
+  --bg: #fbfaf8;
+  --ink: #1d2433;
+  --muted: #667085;
+  --brand: #1f5f5b;
+  --brand-dark: #174844;
+  --line: #e4e1da;
+  --card: #ffffff;
+  --danger: #b42318;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Segoe UI", system-ui, sans-serif; background: var(--bg); color: var(--ink); line-height: 1.6; }
+a { color: var(--brand); text-decoration: none; }
+a:hover { text-decoration: underline; }
+a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 3px solid #8cc7c1; outline-offset: 2px; }
+h1, h2 { font-family: Georgia, serif; line-height: 1.25; }
+h2 { margin-bottom: 1rem; }
+
+.site-header { display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; background: var(--card); border-bottom: 1px solid var(--line); position: relative; }
+.logo { font-family: Georgia, serif; font-size: 1.5rem; font-weight: bold; color: var(--ink); }
+nav { display: flex; align-items: center; gap: 1.25rem; }
+nav a.active { font-weight: 600; text-decoration: underline; }
+.menu-btn { display: none; background: none; border: 0; font-size: 1.6rem; cursor: pointer; }
+
+.btn { display: inline-block; background: var(--brand); color: #fff; border: 0; padding: .7rem 1.4rem; border-radius: 6px; font-size: 1rem; cursor: pointer; }
+.btn:hover { background: var(--brand-dark); text-decoration: none; }
+.btn-small { padding: .4rem .9rem; font-size: .95rem; }
+
+.hero { text-align: center; padding: 5rem 5%; background: #eaf3f1; }
+.hero h1 { font-size: 2.6rem; max-width: 18ch; margin: 0 auto 1rem; }
+.hero p { color: var(--muted); max-width: 46ch; margin: 0 auto 1.75rem; }
+
+.container { max-width: 1100px; margin: 0 auto; padding: 2.5rem 5%; }
+.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 1.25rem; display: flex; flex-direction: column; gap: .5rem; }
+.card .tag { color: var(--brand); font-size: .85rem; font-weight: 600; }
+.card h3 { font-family: Georgia, serif; }
+.card p { color: var(--muted); font-size: .95rem; }
+.card .meta { font-size: .8rem; color: var(--muted); margin-top: auto; }
+.empty { color: var(--muted); grid-column: 1 / -1; }
+
+.auth-box { max-width: 420px; margin: 3rem auto; padding: 2rem; background: var(--card); border: 1px solid var(--line); border-radius: 8px; }
+.auth-box.wide { max-width: 700px; }
+.auth-box h1 { margin-bottom: 1.25rem; font-size: 1.7rem; }
+label { display: block; margin: 1rem 0 .3rem; font-weight: 600; font-size: .95rem; }
+input, select, textarea { width: 100%; padding: .65rem .75rem; border: 1px solid #c9c5bc; border-radius: 6px; font: inherit; background: #fff; }
+.error { color: var(--danger); min-height: 1.4rem; margin: .75rem 0; font-size: .95rem; }
+.muted { color: var(--muted); }
+.auth-box .muted { margin-top: 1rem; }
+
+.dash-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1.5rem; }
+.stats { display: flex; gap: 1rem; margin-bottom: 2rem; }
+.stat { background: var(--card); border: 1px solid var(--line); border-radius: 8px; padding: 1rem 1.5rem; min-width: 140px; }
+.stat strong { display: block; font-size: 1.8rem; }
+.stat span { color: var(--muted); font-size: .9rem; }
+
+.site-footer { text-align: center; padding: 2rem 5%; color: var(--muted); font-size: .9rem; border-top: 1px solid var(--line); margin-top: 3rem; }
+
+@media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px) {
+  .menu-btn { display: block; }
+  nav { display: none; position: absolute; top: 100%; left: 0; right: 0; flex-direction: column; align-items: flex-start; background: var(--card); padding: 1rem 5%; border-bottom: 1px solid var(--line); z-index: 10; }
+  nav.open { display: flex; }
+  .grid { grid-template-columns: 1fr; }
+  .hero h1 { font-size: 2rem; }
+  .dash-head { flex-direction: column; align-items: flex-start; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+
+/* ---------- Module 03: blog cards and details page ---------- */
+.card h3 a { color: inherit; }
+.card h3 a:hover { color: var(--brand); text-decoration: none; }
+.card .read-more { font-size: .9rem; font-weight: 600; }
+.post { max-width: 760px; margin: 2.5rem auto; padding: 0 5%; }
+.post h1 { font-size: 2.1rem; margin: .4rem 0 .5rem; }
+.post .tag { color: var(--brand); font-size: .85rem; font-weight: 600; }
+.post .meta { color: var(--muted); font-size: .9rem; margin-bottom: 1.5rem; }
+.post-body { white-space: pre-wrap; font-size: 1.05rem; line-height: 1.8; margin-bottom: 2rem; }

@@ -1,16 +1,19 @@
-# InkWell Blog - Backend API
+# InkWell Blog - Full Stack (Node.js, Express, MongoDB)
 
-REST API for the InkWell blog application, built with Node.js and Express.js (Module 02 of my internship at Codomax Digital Solutions).
+Blog application built during my internship at Codomax Digital Solutions.
+- Module 01: Frontend (HTML, CSS, JavaScript)
+- Module 02: Backend REST APIs (Node.js, Express, JWT)
+- Module 03: Database integration (MongoDB with Mongoose)
 
 ## Features
-- User registration with validation and password hashing (bcrypt)
-- User login with JWT token authentication
-- Protected routes using middleware
-- Create and fetch blogs
-- Connected to the InkWell frontend with the Fetch API
+- Register and login with hashed passwords (bcrypt) and JWT tokens
+- User credentials and blog posts stored in MongoDB
+- Home page loads all blogs from the database
+- Create blogs (login required), personal dashboard
+- Blog details page for each post (`blog.html?id=...`)
 
 ## Tech Stack
-Node.js, Express.js, bcryptjs, jsonwebtoken, cors, dotenv
+Node.js, Express.js, MongoDB, Mongoose, bcryptjs, jsonwebtoken, cors, dotenv
 
 ## API Endpoints
 | Method | Endpoint | Auth | Purpose |
@@ -19,16 +22,18 @@ Node.js, Express.js, bcryptjs, jsonwebtoken, cors, dotenv
 | POST | /api/auth/login | No | Log in and get a token |
 | GET | /api/blogs | No | Get all blogs |
 | GET | /api/blogs/mine | Yes | Get my blogs |
+| GET | /api/blogs/:id | No | Get one blog (details page) |
 | POST | /api/blogs | Yes | Create a blog |
 
 ## Folder Structure
 ```
 backend/
 ├── server.js
-├── routes/        (auth.js, blogs.js)
-├── middleware/    (auth.js)
-├── utils/         (db.js)
-├── data/          (JSON storage, created automatically)
+├── config/db.js        (MongoDB connection)
+├── models/             (User.js, Blog.js)
+├── routes/             (auth.js, blogs.js)
+├── middleware/auth.js  (JWT check)
+├── public/             (frontend pages, CSS, JS)
 └── .env.example
 ```
 
@@ -37,17 +42,18 @@ backend/
    ```
    npm install
    ```
-2. Create a `.env` file from the example
+2. Create `.env` from the example and fill in your own values
    ```
    copy .env.example .env
    ```
-   Then set your own `JWT_SECRET` inside `.env`.
+   - `JWT_SECRET`: any long random text
+   - `MONGO_URI`: your MongoDB Atlas connection string
 3. Start the server
    ```
    npm start
    ```
-   The API runs on http://localhost:5000
+4. Open http://localhost:5000
 
 ## Notes
-- Data is stored in a JSON file for now. A real database comes in the next module.
-- Passwords are hashed and never stored as plain text.
+- `.env` is not uploaded to GitHub because it holds secrets.
+- The first run adds 3 sample blogs to an empty database.
