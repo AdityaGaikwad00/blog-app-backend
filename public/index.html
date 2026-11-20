@@ -26,6 +26,18 @@
     </section>
     <section class="container">
       <h2>Latest posts</h2>
+      <form class="filter-bar" id="filterForm">
+        <input type="search" id="searchInput" placeholder="Search blogs by title or content" aria-label="Search blogs">
+        <select id="categoryFilter" aria-label="Filter by category">
+          <option value="All">All categories</option>
+          <option>Technology</option>
+          <option>Career</option>
+          <option>Lifestyle</option>
+          <option>Travel</option>
+        </select>
+        <button type="submit" class="btn">Search</button>
+        <button type="button" class="btn btn-outline" id="clearFilter">Clear</button>
+      </form>
       <div class="grid" id="blogGrid"></div>
     </section>
   </main>

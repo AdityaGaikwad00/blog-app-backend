@@ -1,7 +1,7 @@
 {
   "name": "blog-app-backend",
   "version": "1.0.0",
-  "description": "Express REST API for the InkWell blog app (Modules 02 and 03, MongoDB)",
+  "description": "Express REST API for the InkWell blog app (Modules 02, 03 and 04)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
