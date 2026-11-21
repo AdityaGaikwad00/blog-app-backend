@@ -5,6 +5,7 @@ Blog application built during my internship at Codomax Digital Solutions.
 - Module 02: Backend REST APIs (Node.js, Express, JWT)
 - Module 03: Database integration (MongoDB with Mongoose)
 - Module 04: CRUD operations (edit, delete, search and category filter)
+- Module 05: Authentication, protected routes, user profile and dashboard
 
 ## Features
 - Register and login with hashed passwords (bcrypt) and JWT tokens
@@ -14,6 +15,10 @@ Blog application built during my internship at Codomax Digital Solutions.
 - Blog details page for each post (`blog.html?id=...`)
 - Full CRUD: create, read, update and delete blogs (only the author can edit or delete)
 - Search blogs by title or content, and filter by category
+- JWT sessions that expire after 2 hours, with automatic logout
+- Profile page: edit name and bio, change password, view stats
+- Dashboard shows only the logged-in user's blogs
+- Light and dark theme, toast messages, reading time on cards
 
 ## Tech Stack
 Node.js, Express.js, MongoDB, Mongoose, bcryptjs, jsonwebtoken, cors, dotenv
@@ -23,6 +28,9 @@ Node.js, Express.js, MongoDB, Mongoose, bcryptjs, jsonwebtoken, cors, dotenv
 |---|---|---|---|
 | POST | /api/auth/register | No | Create an account |
 | POST | /api/auth/login | No | Log in and get a token |
+| GET | /api/auth/me | Yes | Get my profile and stats |
+| PUT | /api/auth/me | Yes | Update my name and bio |
+| PUT | /api/auth/password | Yes | Change my password |
 | GET | /api/blogs | No | Get all blogs (optional `?search=` and `?category=`) |
 | GET | /api/blogs/mine | Yes | Get my blogs |
 | GET | /api/blogs/:id | No | Get one blog (details page) |

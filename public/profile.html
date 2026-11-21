@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Profile | InkWell Blog</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="profile">
+  <header class="site-header">
+    <a href="index.html" class="logo">InkWell</a>
+    <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">&#9776;</button>
+    <nav id="nav">
+      <a href="index.html">Home</a>
+      <a href="dashboard.html">Dashboard</a>
+      <a href="create-blog.html">Write</a>
+      <a href="profile.html" id="profileLink" style="display:none">Profile</a>
+      <button type="button" class="theme-btn" id="themeBtn" aria-label="Switch light or dark theme">&#9788;</button>
+      <a href="login.html" id="loginLink">Login</a>
+      <a href="register.html" class="btn btn-small" id="registerLink">Register</a>
+    </nav>
+  </header>
+  <main>
+    <section class="container profile">
+      <div class="profile-card">
+        <div class="avatar" id="avatar">?</div>
+        <div>
+          <h1 id="pName">Loading...</h1>
+          <p class="muted" id="pEmail"></p>
+          <p class="muted" id="pJoined"></p>
+        </div>
+        <button type="button" class="btn btn-danger" id="logoutBtn">Logout</button>
+      </div>
+      <div class="stats">
+        <div class="stat"><strong id="pPosts">0</strong><span>Posts</span></div>
+        <div class="stat"><strong id="pWords">0</strong><span>Words written</span></div>
+      </div>
+      <div class="profile-grid">
+        <form class="panel" id="profileForm" novalidate>
+          <h2>Edit profile</h2>
+          <label for="nameInput">Name</label>
+          <input type="text" id="nameInput">
+          <label for="bioInput">Bio (max 200 characters)</label>
+          <textarea id="bioInput" rows="4" maxlength="200" placeholder="Tell readers about yourself"></textarea>
+          <p class="form-msg" id="profileMsg"></p>
+          <button type="submit" class="btn">Save profile</button>
+        </form>
+        <form class="panel" id="passwordForm" novalidate>
+          <h2>Change password</h2>
+          <label for="currentPassword">Current password</label>
+          <input type="password" id="currentPassword">
+          <label for="newPassword">New password</label>
+          <input type="password" id="newPassword" placeholder="At least 6 characters">
+          <label for="confirmNew">Confirm new password</label>
+          <input type="password" id="confirmNew">
+          <p class="form-msg" id="passwordMsg"></p>
+          <button type="submit" class="btn">Change password</button>
+        </form>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer">&copy; 2026 InkWell Blog.</footer>
+  <script src="js/script.js"></script>
+</body>
+</html>

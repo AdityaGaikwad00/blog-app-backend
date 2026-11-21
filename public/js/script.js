@@ -3,10 +3,25 @@
 // If it is opened from Live Server (port 5500), we call the backend on port 5000.
 const API_URL = ["5500", "5501"].includes(location.port) ? "http://localhost:5000/api" : "/api";
 
+// ---------- Theme (light / dark), remembered in the browser ----------
+document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+
 // ---------- Helpers ----------
+// A JWT is three parts joined by dots. The middle part holds the expiry time (exp, in seconds).
+function tokenExpired(token) {
+  try { return JSON.parse(atob(token.split(".")[1])).exp * 1000 < Date.now(); } catch { return true; }
+}
 // The browser only remembers WHO is logged in (a token). Users and blogs live in MongoDB.
 const session = {
-  get token() { return localStorage.getItem("token"); },
+  get token() {
+    const t = localStorage.getItem("token");
+    if (t && tokenExpired(t)) {                       // session management: expired tokens are dropped
+      localStorage.removeItem("token"); localStorage.removeItem("currentUser");
+      sessionStorage.setItem("expired", "1");
+      return null;
+    }
+    return t;
+  },
   get user() { try { return JSON.parse(localStorage.getItem("currentUser")); } catch { return null; } },
   save(token, user) { localStorage.setItem("token", token); localStorage.setItem("currentUser", JSON.stringify(user)); },
   clear() { localStorage.removeItem("token"); localStorage.removeItem("currentUser"); }
@@ -31,6 +46,16 @@ async function api(path, method = "GET", body) {
 
 const escapeHTML = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 
+// Small pop-up message (replaces alert)
+function toast(message, type = "ok") {
+  const box = document.createElement("div");
+  box.className = "toast " + type;
+  box.setAttribute("role", "status");
+  box.textContent = message;
+  document.body.appendChild(box);
+  setTimeout(() => box.remove(), 3200);
+}
+
 // Is the logged-in user the author of this blog?
 const user = session.user;
 const isMine = (b) => Boolean(user && session.token && b.user && String(b.user) === String(user.id));
@@ -39,6 +64,7 @@ const isMine = (b) => Boolean(user && session.token && b.user && String(b.user) 
 function blogCard(b, manage = false) {
   const excerpt = b.content.length > 110 ? b.content.slice(0, 110) + "..." : b.content;
   const id = encodeURIComponent(b._id);
+  const mins = Math.max(1, Math.round(b.content.split(/\s+/).length / 200));
   const actions = manage
     ? `<div class="card-actions">
          <a class="btn btn-small btn-outline" href="edit-blog.html?id=${id}">Edit</a>
@@ -46,10 +72,10 @@ function blogCard(b, manage = false) {
        </div>`
     : "";
   return `<article class="card">
-    <span class="tag">${escapeHTML(b.category)}</span>
+    <span class="tag" data-cat="${escapeHTML(b.category)}">${escapeHTML(b.category)}</span>
     <h3><a href="blog.html?id=${id}">${escapeHTML(b.title)}</a></h3>
     <p>${escapeHTML(excerpt)}</p>
-    <span class="meta">By ${escapeHTML(b.author)} on ${escapeHTML(b.date)}</span>
+    <span class="meta">By ${escapeHTML(b.author)} on ${escapeHTML(b.date)} &middot; ${mins} min read</span>
     <a class="read-more" href="blog.html?id=${id}">Read more</a>
     ${actions}
   </article>`;
@@ -60,9 +86,10 @@ async function deleteBlog(id) {
   if (!confirm("Delete this blog? This cannot be undone.")) return false;
   try {
     await api("/blogs/" + encodeURIComponent(id), "DELETE");
+    toast("Blog deleted");
     return true;
   } catch (err) {
-    alert(err.message);
+    toast(err.message, "error");
     return false;
   }
 }
@@ -85,6 +112,7 @@ if (user && session.token) {
     window.location.href = "index.html";
   });
   document.getElementById("registerLink").style.display = "none";
+  document.getElementById("profileLink").style.display = "";
 }
 
 const page = document.body.dataset.page;
@@ -136,7 +164,7 @@ if (page === "post") {
                <button type="button" class="btn btn-small btn-danger" id="deleteBtn">Delete</button>
              </div>`
           : "";
-        box.innerHTML = `<span class="tag">${escapeHTML(b.category)}</span>
+        box.innerHTML = `<span class="tag" data-cat="${escapeHTML(b.category)}">${escapeHTML(b.category)}</span>
           <h1>${escapeHTML(b.title)}</h1>
           <p class="meta">By ${escapeHTML(b.author)} on ${escapeHTML(b.date)}</p>
           ${actions}
@@ -199,12 +227,14 @@ if (page === "dashboard") {
   } else {
     const list = document.getElementById("myBlogs");
     document.getElementById("welcome").textContent = `Signed in as ${user.name}`;
+    document.getElementById("greeting").textContent = `Welcome back, ${user.name.split(" ")[0]}`;
 
     function loadMine() {
       api("/blogs/mine")
         .then((mine) => {
           document.getElementById("statPosts").textContent = mine.length;
           document.getElementById("statWords").textContent = mine.reduce((n, b) => n + b.content.split(/\s+/).length, 0);
+          document.getElementById("statCats").textContent = new Set(mine.map((b) => b.category)).size;
           list.innerHTML = mine.length
             ? mine.map((b) => blogCard(b, true)).join("")
             : '<p class="empty">You have not written anything yet. Select New blog to start.</p>';
@@ -274,6 +304,84 @@ if (page === "edit") {
         await api("/blogs/" + encodeURIComponent(id), "PUT", { title, category, content });
         window.location.href = "dashboard.html";
       } catch (err) { showError(err.message); }
+    });
+  }
+}
+
+
+// ---------- Theme toggle (all pages) ----------
+const themeBtn = document.getElementById("themeBtn");
+function paintThemeButton() { themeBtn.innerHTML = document.documentElement.dataset.theme === "dark" ? "&#9790;" : "&#9788;"; }
+paintThemeButton();
+themeBtn.addEventListener("click", () => {
+  const next = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
+  document.documentElement.dataset.theme = next;
+  localStorage.setItem("theme", next);
+  paintThemeButton();
+});
+
+// ---------- Login page: tell the user if the session expired ----------
+if (page === "login" && sessionStorage.getItem("expired")) {
+  sessionStorage.removeItem("expired");
+  showError("Your session expired. Please log in again.");
+}
+
+// ---------- Profile ----------
+if (page === "profile") {
+  if (!user || !session.token) {
+    window.location.href = "login.html";
+  } else {
+    const setMsg = (id, text, ok) => {
+      const el = document.getElementById(id);
+      el.textContent = text;
+      el.className = "form-msg " + (ok ? "ok" : "bad");
+    };
+
+    api("/auth/me")
+      .then(({ user: u, stats }) => {
+        document.getElementById("avatar").textContent = u.name.charAt(0).toUpperCase();
+        document.getElementById("pName").textContent = u.name;
+        document.getElementById("pEmail").textContent = u.email;
+        document.getElementById("pJoined").textContent = "Member since " + new Date(u.createdAt).toLocaleDateString("en-IN", { year: "numeric", month: "long", day: "numeric" });
+        document.getElementById("pPosts").textContent = stats.posts;
+        document.getElementById("pWords").textContent = stats.words;
+        document.getElementById("nameInput").value = u.name;
+        document.getElementById("bioInput").value = u.bio;
+      })
+      .catch(() => { window.location.href = "login.html"; });
+
+    document.getElementById("profileForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("nameInput").value.trim();
+      const bio = document.getElementById("bioInput").value.trim();
+      if (name.length < 2) return setMsg("profileMsg", "Name must be at least 2 characters.", false);
+      try {
+        const data = await api("/auth/me", "PUT", { name, bio });
+        session.save(data.token, data.user);              // the token holds the name, so we store the new one
+        document.getElementById("pName").textContent = data.user.name;
+        document.getElementById("avatar").textContent = data.user.name.charAt(0).toUpperCase();
+        setMsg("profileMsg", "Profile saved.", true);
+        toast("Profile updated");
+      } catch (err) { setMsg("profileMsg", err.message, false); }
+    });
+
+    document.getElementById("passwordForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const currentPassword = document.getElementById("currentPassword").value;
+      const newPassword = document.getElementById("newPassword").value;
+      if (newPassword.length < 6) return setMsg("passwordMsg", "New password must be at least 6 characters.", false);
+      if (newPassword !== document.getElementById("confirmNew").value) return setMsg("passwordMsg", "New passwords do not match.", false);
+      try {
+        await api("/auth/password", "PUT", { currentPassword, newPassword });
+        e.target.reset();
+        setMsg("passwordMsg", "Password changed.", true);
+        toast("Password changed");
+      } catch (err) { setMsg("passwordMsg", err.message, false); }
+    });
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+      session.clear();
+      window.location.href = "login.html";
     });
   }
 }
