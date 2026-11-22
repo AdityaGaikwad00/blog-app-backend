@@ -2,7 +2,7 @@
 
 A full-stack blog platform where people can register, write, edit and share posts. Built with Node.js, Express and MongoDB as part of my internship at **Codomax Digital Solutions**.
 
-**Live demo:** https://YOUR-APP-NAME.onrender.com
+**Live demo:** https://inkwell-blog-pzpf.onrender.com
 *(The free hosting plan sleeps after 15 minutes without visitors, so the first load can take about a minute.)*
 
 ![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)
