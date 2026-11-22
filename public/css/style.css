@@ -139,3 +139,22 @@ nav a:not(.btn):hover { border-bottom-color: var(--brand); text-decoration: none
 .form-msg.bad { color: var(--danger); }
 [data-theme="dark"] .form-msg.ok { color: #6ee7a0; }
 @media (max-width: 800px) { .profile-grid { grid-template-columns: 1fr; } }
+
+/* ---------- Module 06: footer, 404 page, mobile fixes ---------- */
+.site-footer p { margin: .2rem 0; }
+.site-footer .credit { font-size: .85rem; }
+.site-footer .credit strong { color: var(--ink); }
+.notfound { text-align: center; padding: 5rem 5%; }
+.notfound .code { font: bold 5rem Georgia, serif; color: var(--brand); line-height: 1; }
+.notfound h1 { margin: .75rem 0 .5rem; }
+.notfound .btn { margin-top: 1.25rem; }
+.card, .post h1, .post-body, .profile-card h1 { overflow-wrap: anywhere; }
+@media (max-width: 640px) {
+  .hero { padding: 3.5rem 5%; }
+  .container { padding: 1.75rem 5%; }
+  .auth-box { margin: 1.5rem 5%; padding: 1.4rem; }
+  .btn-small { min-height: 40px; display: inline-flex; align-items: center; }
+  .card-actions, .post-actions { flex-wrap: wrap; }
+  .stat { flex: 1 1 130px; }
+  .toast { width: calc(100% - 2rem); text-align: center; }
+}

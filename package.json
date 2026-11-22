@@ -1,19 +1,33 @@
 {
   "name": "blog-app-backend",
   "version": "1.0.0",
-  "description": "Express REST API for the InkWell blog app (Modules 02 to 05)",
+  "description": "InkWell: a full-stack blog application with Node.js, Express and MongoDB",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "cors": "^2.8.6",
     "dotenv": "^18.0.9",
     "express": "^5.3.0",
+    "express-rate-limit": "^8.7.5",
+    "helmet": "^8.3.0",
     "jsonwebtoken": "^9.0.3",
     "mongoose": "^9.11.4"
+  },
+  "author": "Aditya Gaikwad",
+  "keywords": [
+    "blog",
+    "nodejs",
+    "express",
+    "mongodb",
+    "jwt",
+    "full-stack"
+  ],
+  "engines": {
+    "node": ">=18"
   }
 }
